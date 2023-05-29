@@ -1,12 +1,12 @@
-const Book = require("../Models/Book");
+const Book = require("../Models/Book.models");
 const Jimp = require("jimp");
-
+const { mutipleMongoosetoObject } = require("../Util/mongoose.util");
+const { MongoosetoObject } = require("../Util/mongoose.util");
 class BookController {
   indexSp = (req, res, next) => {
     Book.find({}).then((sp) => {
-      res.render("listBook", {
-        titleView: "Thông tin chi tiết",
-        sp: sp.map((user) => user.toJSON()),
+      res.render("listBook",{
+        sp : mutipleMongoosetoObject(sp)
       });
     });
   };
@@ -14,44 +14,27 @@ class BookController {
     res.render("addBook");
   };
   addBook = (req, res, next) => {
-    const sp = new Book(req.body);
-    const imgpath = req.file.path;
+    const book = new Book(req.body);
+    const imgPath = req.file.path;
     console.log(req.file);
-    console.log(imgpath);
-    sp.image = imgpath;
+    console.log(imgPath);
+    book.image = imgPath;
 
     try {
-      sp.save();
+      book.save();
       res.redirect("/Book/ListBook");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
-  updateBook = async (req,res,next) => {
-    try {
-      const {nameBook, date, author } = req.body;
-      const imgpath = req.file.path;
-      const image = await Jimp.read(imgpath);
-      const basa64Image = await image.getBase64Async(Jimp.AUTO);
-  
-      await Book.findOneAndUpdate(
-        { _id: req.params.id },
-        { Mauser, Tenuser, ageuser, image: basa64Image, ngayxuatban, tacgia }
-      );
-      res.redirect("/api/getDetail");
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Lỗi khi update thông tin người dùng");
-    }
-  }
-  searchBook = async (req,res,next) => {
+  searchBook = async (req, res, next) => {
     try {
       const Tenuser = req.query.Search;
       // Tìm kiếm trong cơ sở dữ liệu
       const Searchnv = await Sanpham.find({
         Tenuser: { $regex: Tenuser, $options: "i" },
       });
-  
+
       res.render("detail", {
         sp: Searchnv.map((user) => user.toJSON()),
       });
@@ -59,24 +42,49 @@ class BookController {
       console.error(error);
       res.status(500).json({ message: "Server error" });
     }
+  };
+  edit(req, res, next) {
+    Book.findById(req.params.id)
+      .then((book) => {
+        res.render("editBook", {
+          book: MongoosetoObject(book),
+        });
+      })
+      .catch(next);
   }
-  editBook = async(req,res) => {
-    try {
-      const user = await Sanpham.findById(req.params.id);
-      res.render("update", {
-        user: user.toJSON(),
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  update(req, res, next) {
+    console.log(req.file);
+    Book.updateOne(
+      { _id: req.params.id },
+      {
+        nameBook: req.body.nameBook,
+        date: req.body.username,
+        author: req.body.password,
+        content: req.body.content,
+        image: req.file.path,
+      }
+    )
+      .then(() => res.redirect("/Book/listBook"))
+      .catch(next);
   }
   delete(req, res, next) {
-    Book
-      .deleteOne({ _id: req.params.id })
+    Book.deleteOne({ _id: req.params.id })
       .then(() => {
         res.redirect("back");
       })
       .catch(next);
+  }
+  detailBook(req,res,next)  {
+    Book.findById(req.params.id)
+    .then((book) => {
+      res.render("detailBook", {
+        book: MongoosetoObject(book),
+      });
+    })
+    .catch(next);
+  }
+  addChapter(req,res,next) {
+    res.render('addChapter')
   }
 }
 module.exports = new BookController();

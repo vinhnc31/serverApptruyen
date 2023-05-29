@@ -5,7 +5,6 @@
       <th>Name Book</th>
       <th>Image Book</th>
       <th>Author</th>
-      <th>Content</th>
       <th>Chức Năng</th>
     </tr>
   </thead>
@@ -16,14 +15,13 @@
       <td>{{this.nameBook}}</td>
       <td><img src="http://localhost:4000/{{this.image}}" style="width: 50px;height: 50px;"></td>
       <td>{{this.author}}</td>
-      <td>{{this.content}}</td>
       <td>
-        <a href="/api/edit/{{this._id}}" class="btn btn-primary">Edit</a>
+        <a href="/Book/{{this._id}}/edit" class="btn btn-primary">Edit</a>
         <a type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-User-model"
           data-id="{{this._id}}">
           DELETE
         </a>
-        {{!-- <a href="/api/getDetailchitiet/{{this._id}}" class="btn btn-primary">chi tiet</a> --}}
+        <a href="/Book/{{this._id}}/detail" class="btn btn-primary">Detail</a>
       </td>
     </tr>
     {{/each}}
@@ -31,38 +29,38 @@
 </table>
 
 <div id="delete-User-model" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Thông Báo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn Có Chắc Là Muốn Xóa Nó Không ?</p>
-                <p>Khi Xóa Dữ Liệu Sẽ Không Khôi Phục Được !</p>
-            </div>
-            <div class="modal-footer">
-                <button id="btn-delete-user" type="button" class="btn btn-danger">DELETE</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thông Báo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn Có Chắc Là Muốn Xóa Nó Không ?</p>
+        <p>Khi Xóa Dữ Liệu Sẽ Không Khôi Phục Được !</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete-user" type="button" class="btn btn-danger">DELETE</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>
 <form name="from-delete" method="POST"></form>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var idsp;
-        var deletefrom = document.forms['from-delete']
-        $('#delete-User-model').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            idsp = button.data('id');
-        });
-        var btnDelete = document.getElementById('btn-delete-user')
-        btnDelete.onclick = function () {
-            deletefrom.action = idsp + '?_method=DELETE';
-            deletefrom.submit();
-        }
-    })
+  document.addEventListener('DOMContentLoaded', function () {
+    var idsp;
+    var deletefrom = document.forms['from-delete']
+    $('#delete-User-model').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      idsp = button.data('id');
+    });
+    var btnDelete = document.getElementById('btn-delete-user')
+    btnDelete.onclick = function () {
+      deletefrom.action = idsp + '?_method=DELETE';
+      deletefrom.submit();
+    }
+  })
 </script>
