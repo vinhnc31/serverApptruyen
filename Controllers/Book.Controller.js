@@ -86,5 +86,12 @@ class BookController {
   addChapter(req,res,next) {
     res.render('addChapter')
   }
+  getAPI = (req, res, next) => {
+    Book.find({}).then((sp) => {
+      res.json({
+        sp : mutipleMongoosetoObject(sp)
+      });
+    });
+  };
 }
 module.exports = new BookController();
