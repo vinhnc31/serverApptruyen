@@ -3,7 +3,6 @@ const app = express();
 const User = require("../Models/User");
 const multer = require("multer");
 const Jimp = require("jimp");
-const upload = multer({ dest: "uploads/" });
 
 app.get("/add", (req, res) => {
   res.render("add");

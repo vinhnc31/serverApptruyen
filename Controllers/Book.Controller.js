@@ -1,19 +1,20 @@
 const Book = require("../Models/Book.models");
-const Jimp = require("jimp");
+const ChapterBook = require("../Models/Chapter.models");
 const { mutipleMongoosetoObject } = require("../Util/mongoose.util");
 const { MongoosetoObject } = require("../Util/mongoose.util");
 class BookController {
-  indexSp = (req, res, next) => {
+  indexSp(req, res, next) {
     Book.find({}).then((sp) => {
-      res.render("listBook",{
-        sp : mutipleMongoosetoObject(sp)
+      res.render("listBook", {
+        sp: mutipleMongoosetoObject(sp),
       });
     });
-  };
+  }
   indexAdd = (req, res, next) => {
     res.render("addBook");
   };
-  addBook = (req, res, next) => {
+  addBook(req, res, next) {
+    console.log(req.body);
     const book = new Book(req.body);
     const imgPath = req.file.path;
     console.log(req.file);
@@ -26,8 +27,8 @@ class BookController {
     } catch (err) {
       console.log(err);
     }
-  };
-  searchBook = async (req, res, next) => {
+  }
+  async searchBook(req, res, next) {
     try {
       const Tenuser = req.query.Search;
       // Tìm kiếm trong cơ sở dữ liệu
@@ -42,7 +43,7 @@ class BookController {
       console.error(error);
       res.status(500).json({ message: "Server error" });
     }
-  };
+  }
   edit(req, res, next) {
     Book.findById(req.params.id)
       .then((book) => {
@@ -74,24 +75,32 @@ class BookController {
       })
       .catch(next);
   }
-  detailBook(req,res,next)  {
+  detailBook(req, res, next) {
     Book.findById(req.params.id)
-    .then((book) => {
-      res.render("detailBook", {
-        book: MongoosetoObject(book),
-      });
-    })
-    .catch(next);
+      .then((book) => {
+        res.render("detailBook", {
+          book: MongoosetoObject(book),
+        });
+      })
+      .catch(next);
   }
-  addChapter(req,res,next) {
-    res.render('addChapter')
+  indexChapter(req, res, next) {
+    res.render("addChapter");
   }
-  getAPI = (req, res, next) => {
+  getAPI(req, res, next) {
     Book.find({}).then((sp) => {
       res.json({
-        sp : mutipleMongoosetoObject(sp)
+        sp: mutipleMongoosetoObject(sp),
       });
     });
-  };
+  }
+  addChapter(req, res, next) {
+    console.log("res: ", req.body);
+    const chapTer = new ChapterBook(req.body);
+    chapTer
+      .save()
+      .then(() => res.json("them thanh cong"))
+      .catch((err) => console.log(err));
+  }
 }
 module.exports = new BookController();

@@ -4,9 +4,7 @@ const Schema = mongoose.Schema;
 const chapter = new Schema(
   {
     nameChapter: String,
-    content: String,
-    thuTu : Integer,
-    view : Integer,
+    contentChapter: String,
   },
   { timestamps: true }
 );

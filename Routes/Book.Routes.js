@@ -25,6 +25,7 @@ routes.get('/search',bookController.searchBook);
 routes.get('/:id/edit',bookController.edit);
 routes.delete('/:id',bookController.delete);
 routes.get('/:id/detail',bookController.detailBook);
-routes.get('/addChapter',bookController.addChapter);
+routes.get('/addChapter',bookController.indexChapter);
+routes.post('/addChapter',bookController.addChapter)
 routes.get('/api',bookController.getAPI);
 module.exports = routes;

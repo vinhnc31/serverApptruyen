@@ -9,9 +9,9 @@ const Book = new Schema(
     date: String,
     author: String,
     content: String,
-    chuong: {
+    chapter: {
       type: Schema.Types.ObjectId,
-      ref: "Chuong",
+      ref: "chapter",
     },
   },
   { timestamps: true }
