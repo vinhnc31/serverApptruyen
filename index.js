@@ -11,11 +11,7 @@ app.use(express.json());
 app.use(methods("_method"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
+app.use(bodyParser.urlencoded({ extended: false }));
 app.engine(
   ".hbs",
   handlebar.engine({

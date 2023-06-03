@@ -1,38 +1,39 @@
-const User = require('../Models/User.models')
-class UserController {
-  addUser(req, res, next) {
-    const user = new User({
-        userName : req.body.userName,
-        email : req.body.email,
-        password : req.body.password
-    });
-    console.log(req.body)
-    try {
-      user.save();
-      res.json("Add thanh cong");
-    } catch (err) {
-      console.log(err);
-    }
-  }
+const UserModels = require("../Models/User.models");
 
-  LoginUser(req, res, next) {
-    try {
-      const email = req.body.email;
-      console.log(email);
-      let users = User.findOne({ email: email });
-      if (!users) {
-        res.send("email or password not found");
-        return;
-      } else {
-        users.comparePassword(req.body.password, function (err, isMatch) {
-          if (isMatch && !err) {
-            res.json(users);
-          }
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
+class UserController {
+  sigUpUser(req, res, next) {
+    const userName = req.query.userName;
+    const email = req.query.email;
+    const password = req.query.password;
+    UserModels.create({
+      email: email,
+      userName: userName,
+      password: password,
+    })
+      .then((data) => {
+        res.json("Tao tai khoan thanh cong");
+      })
+      .catch((err) => res.status(400).json("Tao tai khoan that bai"));
+  }
+  login(req, res, next) {
+    const email = req.body.email;
+    const password = req.body.password;
+    UserModels.findOne({ email: email, password: password })
+      .then((data) => {
+        res.status(220).json("dang nhap thanh cong");
+      })
+      .catch((err) => {
+        res.status(500).json("Dang nhap that bai");
+      });
+  }
+  updateUser(req, res, next) {
+    const id = req.param.id;
+    const newPassword = req.body.newPassword;
+    UserModels.findByIdAndUpdate(id, { password: newPassword })
+      .then((data) => {
+        res.json("Update thanh cong");
+      })
+      .catch((err) => res.status(500).json("Update That bai"));
   }
 }
 module.exports = new UserController();

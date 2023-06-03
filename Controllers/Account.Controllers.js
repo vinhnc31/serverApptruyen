@@ -1,33 +1,59 @@
-const Account = require("../Models/Account.models");
+const AccountModels = require("../Models/Account.models");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 class AccountController {
   indexLogin(req, res, next) {
     res.render("login", { layout: "main" });
   }
+  indexSignup(req, res, next) {
+    res.render("signup", { layout: "main" });
+  }
+  signup(req, res, next) {
+    const email = req.body.email;
+    const username = req.body.username;
+    bcrypt.hash(req.body.password, 10, (err, hashedPass) => {
+      console.log(req.body);
+      if (err) {
+        return res.status(500).json({ error: err });
+      } else {
+        AccountModels.findOne({
+          email: email,
+        })
+          .then((data) => {
+            if (data) {
+              res.status(500).json("email da ton tai");
+            } else {
+              return AccountModels.create({
+                email: email,
+                username: username,
+                password: hashedPass,
+              });
+            }
+          })
+          .then((data) => {
+            res.redirect("/login", { layout: "main" });
+          })
+          .catch((err) => {
+            res.status(500).json("dang ki that bai");
+          });
+      }
+    });
+  }
   login(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
-
-    Account.findOne({ email: email })
+    AccountModels.findOne({ email: email })
       .then((data) => {
-        console.log(data)
-        if (data) {
-          console.log(password, data.password);
-          bcrypt.compare(password, data.password).then((user) => {
-            console.log(user);
-            if (user) {
-              var token = jwt.sign({ _id: data._id }, "mk");
-              console.log(token)
-            } else {
-              return res.json("sai password");
-            }
-          });
-        } else {
-          return res.json("that bai");
-        }
+        bcrypt.compare(data.password, password).then((account) => {
+          if (account) {
+            req.redirect("/Book/listBook");
+          } else {
+            res.status(550).json("Sai mat khau");
+          }
+        });
       })
       .catch((err) => {
-        res.status(500).json("loi sv");
+        res.status(500).json("Dang nhap that bai");
       });
   }
 }
