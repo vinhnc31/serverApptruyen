@@ -83,9 +83,22 @@ class BookController {
         });
       })
       .catch(next);
+      ChapterBook.findById(req.params.id)
+      .then((chapTer) => {
+        res.render("detailBook", {
+          book: MongoosetoObject(chapTer),
+        });
+      })
+      .catch(next);
   }
   indexChapter(req, res, next) {
-    res.render("addChapter");
+    Book.findById(req.params.id)
+      .then((book) => {
+        res.render("addChapter", {
+          book: MongoosetoObject(book),
+        });
+      })
+      .catch(next);
   }
   getAPI(req, res, next) {
     Book.find({}).then((sp) => {
@@ -94,13 +107,20 @@ class BookController {
       });
     });
   }
-  addChapter(req, res, next) {
-    console.log("res: ", req.body);
-    const chapTer = new ChapterBook(req.body);
-    chapTer
-      .save()
-      .then(() => res.json("them thanh cong"))
-      .catch((err) => console.log(err));
+  async addChapter(req, res, next) {
+    try {
+      const chapTer = new ChapterBook(req.body);
+      const saveChapter = await chapTer.save();
+      if (req.body.book) {
+        const book = await Book.findById(req.body.book);
+        console.log("book",book)
+        await book.updateOne({ $push: { chapter: saveChapter._id } });
+      }
+      res.status(200).json(saveChapter)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error });
+    }
   }
 }
 module.exports = new BookController();

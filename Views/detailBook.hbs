@@ -8,7 +8,10 @@
             <p style="margin-top: 20px;">{{book.content}}</p>
         </div>
         <div class="col-lg-3">
-            <a class="btn btn-primary" href="/Book/addChapter">Thêm Chương</a>
+            <a class="btn btn-primary" href="/Book/{{book._id}}/addChapter">Thêm Chương</a>
+            {{#each chapter}}
+            <a href="">{{chapter.nameChapter}}</a>
+            {{/each}}
         </div>
     </div>
 </div>

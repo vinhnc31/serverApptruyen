@@ -9,10 +9,12 @@ const Book = new Schema(
     date: String,
     author: String,
     content: String,
-    chapter: {
-      type: Schema.Types.ObjectId,
-      ref: "chapter",
-    },
+    chapter: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "chapter",
+      },
+    ],
   },
   { timestamps: true }
 );
