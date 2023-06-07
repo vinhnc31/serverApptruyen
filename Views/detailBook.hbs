@@ -1,6 +1,6 @@
 <div class="mt-4">
     <div class="row">
-        
+
         <div class="col-lg-9">
             <h1>{{book.nameBook}}</h1>
             <img class="text-center" src="/{{book.image}}" alt="fail">
@@ -9,8 +9,12 @@
         </div>
         <div class="col-lg-3">
             <a class="btn btn-primary" href="/Book/{{book._id}}/addChapter">Thêm Chương</a>
-            {{#each chapter}}
-            <a href="">{{chapter.nameChapter}}</a>
+            {{#each ct}}
+                <div class="card">
+                    <div class="card-body">
+                        <a href="">{{ct.nameChapter}}</a>
+                    </div>
+                </div>
             {{/each}}
         </div>
     </div>

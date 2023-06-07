@@ -7,6 +7,7 @@ const Book = new Schema(
     nameBook: String,
     image: String,
     date: String,
+    genre:String,
     author: String,
     content: String,
     chapter: [

@@ -5,9 +5,6 @@ class AccountController {
   indexLogin(req, res, next) {
     res.render("login", { layout: "main" });
   }
-  indexSignup(req, res, next) {
-    res.render("signup", { layout: "main" });
-  }
   signup(req, res, next) {
     const email = req.body.email;
     const username = req.body.username;
@@ -31,7 +28,7 @@ class AccountController {
             }
           })
           .then((data) => {
-            res.redirect("/login", { layout: "main" });
+            res.status(200).json("Add account successfully ");
           })
           .catch((err) => {
             res.status(500).json("dang ki that bai");
@@ -44,16 +41,20 @@ class AccountController {
     const password = req.body.password;
     AccountModels.findOne({ email: email })
       .then((data) => {
-        bcrypt.compare(data.password, password).then((account) => {
-          if (account) {
-            req.redirect("/Book/listBook");
-          } else {
-            res.status(550).json("Sai mat khau");
-          }
-        });
+        if (!data) {
+          res.status(404).json("Email khong ton tai");
+        } else {
+          bcrypt.compare(password, data.password).then((match) => {
+            if (match) {
+              res.redirect("/Book/listBook");
+            } else {
+              res.status(550).json("Sai mat khau");
+            }
+          });
+        }
       })
       .catch((err) => {
-        res.status(500).json("Dang nhap that bai");
+        res.status(500).json({ error: "Dang nhap that bai" });
       });
   }
 }

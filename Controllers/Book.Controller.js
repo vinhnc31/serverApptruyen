@@ -20,7 +20,6 @@ class BookController {
     console.log(req.file);
     console.log(imgPath);
     book.image = imgPath;
-
     try {
       book.save();
       res.redirect("/Book/ListBook");
@@ -83,13 +82,6 @@ class BookController {
         });
       })
       .catch(next);
-      ChapterBook.findById(req.params.id)
-      .then((chapTer) => {
-        res.render("detailBook", {
-          book: MongoosetoObject(chapTer),
-        });
-      })
-      .catch(next);
   }
   indexChapter(req, res, next) {
     Book.findById(req.params.id)
@@ -113,10 +105,10 @@ class BookController {
       const saveChapter = await chapTer.save();
       if (req.body.book) {
         const book = await Book.findById(req.body.book);
-        console.log("book",book)
+        console.log("book", book);
         await book.updateOne({ $push: { chapter: saveChapter._id } });
       }
-      res.status(200).json(saveChapter)
+      res.status(200).json(saveChapter);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error });
