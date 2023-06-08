@@ -40,4 +40,4 @@ User.methods.comparePassword = function (passw, cb) {
     cb(null, isMatch);
   });
 };
-module.exports = mongoose.model("user", User);
+module.exports = mongoose.model("useraccount", User);
