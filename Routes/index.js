@@ -4,6 +4,6 @@ const user = require('./User.routes')
 function routes(app) {
   app.use("/", account);
   app.use("/Book", book);
-  app.use("/User", user)
+  app.use("/User", user);
 }
 module.exports = routes;

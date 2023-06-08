@@ -1,9 +1,9 @@
 const UserModels = require("../Models/User.models");
 class UserController {
   sigUpUser(req, res, next) {
-    const userName = req.query.userName;
-    const email = req.query.email;
-    const password = req.query.password;
+    const userName = req.body.userName;
+    const email = req.body.email;
+    const password = req.body.password;
     UserModels.create({
       email: email,
       userName: userName,
@@ -34,6 +34,26 @@ class UserController {
     }).catch((err) => {
       res.status(500).json("Loi server")
     })
+  }
+  async LoginUser(req, res, next) {
+    try {
+      const email = req.body.email;
+      console.log(email)
+
+      let users = await UserModels.findOne({ email: email })
+      if (!users) {
+        res.send("email or password not found")
+        return
+      } else {
+        users.comparePassword(req.body.password, function (err, isMatch) {
+          if (isMatch && !err) {
+            res.json(users)
+          }
+        });
+      }
+    } catch (error) {
+      res.status(500).json("Loi roi")
+    }
   }
 }
 module.exports = new UserController();

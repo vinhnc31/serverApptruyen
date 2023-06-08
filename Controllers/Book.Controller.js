@@ -9,6 +9,11 @@ class BookController {
         sp: mutipleMongoosetoObject(sp),
       });
     });
+    ChapterBook.find({}).then((ct) => {
+      res.render("listBook", {
+        ct: mutipleMongoosetoObject(ct),
+      });
+    });
   }
   indexAdd = (req, res, next) => {
     res.render("addBook");

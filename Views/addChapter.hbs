@@ -1,7 +1,7 @@
 <div class="container">
   <h2 style="text-align: center;margin-top: 20px;font-size: 50px;">Add Book</h2>
   <form method="POST" action="/book/addChapter" autocomplete="off" enctype="application/x-www-form-urlencoded">
-  <div class="form-group">
+    <div class="form-group">
       <label for="book">Book: </label>
       <input type="text" class="form-control" value="{{book._id}}" name="book">
     </div>
@@ -11,7 +11,9 @@
     </div>
     <div class="form-group">
       <label for="contentChapter">Content: </label>
-      <input type="text" class="form-control" name="contentChapter" required placeholder="Enter Content :">
+      <div class="input-group">
+        <textarea name="contentChapter" required placeholder="Enter Content :" class="form-control" aria-label="With textarea"></textarea>
+      </div>
     </div>
     <div class="mb-6">
       <button type="submit" class="btn btn-block text-uppercase btn-primary" style="margin-top: 5px;">
