@@ -9,11 +9,6 @@ class BookController {
         sp: mutipleMongoosetoObject(sp),
       });
     });
-    ChapterBook.find({}).then((ct) => {
-      res.render("listBook", {
-        ct: mutipleMongoosetoObject(ct),
-      });
-    });
   }
   indexAdd = (req, res, next) => {
     res.render("addBook");
@@ -84,6 +79,23 @@ class BookController {
       .then((book) => {
         res.render("detailBook", {
           book: MongoosetoObject(book),
+        });
+      })
+      .catch(next);
+  }
+  Book(req, res, next) {
+    Book.find({}).then((book) => {
+      console.log(ct);
+      res.render("detailBook", {
+        book: mutipleMongoosetoObject(book),
+      });
+    });
+  }
+  detailChapter(req,res,next) {
+    ChapterBook.findById(req.params.id)
+      .then((chapter) => {
+        res.json({   
+          book: MongoosetoObject(chapter),
         });
       })
       .catch(next);

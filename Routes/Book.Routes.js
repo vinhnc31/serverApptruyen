@@ -3,6 +3,7 @@ const routes = express.Router();
 const multer = require("multer");
 const bookController = require('../Controllers/Book.Controller')
 const Jimp = require("jimp");
+const UserController = require('../Controllers/User.Controller');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -28,4 +29,5 @@ routes.get('/:id/detail',bookController.detailBook);
 routes.get('/:id/addChapter',bookController.indexChapter);
 routes.post('/addChapter',bookController.addChapter);
 routes.get('/api',bookController.getAPI);
+routes.get("/:id/detailChapter",bookController.detailChapter)
 module.exports = routes;
