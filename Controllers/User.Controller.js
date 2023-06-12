@@ -45,7 +45,6 @@ class UserController {
     try {
       const email = req.body.email;
       console.log(email);
-
       let users = await UserModels.findOne({ email: email });
       if (!users) {
         res.send("email or password not found");

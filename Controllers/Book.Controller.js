@@ -91,11 +91,11 @@ class BookController {
       });
     });
   }
-  detailChapter(req,res,next) {
+  detailChapter(req, res, next) {
     ChapterBook.findById(req.params.id)
       .then((chapter) => {
-        res.json({   
-          book: MongoosetoObject(chapter),
+        res.render("detailChapter",{
+          chapter: MongoosetoObject(chapter),
         });
       })
       .catch(next);
@@ -125,7 +125,7 @@ class BookController {
         console.log("book", book);
         await book.updateOne({ $push: { chapter: saveChapter._id } });
       }
-      res.status(200).json(saveChapter);
+      res.redirect(`/Book/${req.body.book}/detail`);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: error });
