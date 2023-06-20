@@ -27,22 +27,6 @@ class BookController {
       console.log(err);
     }
   }
-  async searchBook(req, res, next) {
-    try {
-      const Tenuser = req.query.Search;
-      // Tìm kiếm trong cơ sở dữ liệu
-      const Searchnv = await Sanpham.find({
-        Tenuser: { $regex: Tenuser, $options: "i" },
-      });
-
-      res.render("detail", {
-        sp: Searchnv.map((user) => user.toJSON()),
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
-    }
-  }
   edit(req, res, next) {
     Book.findById(req.params.id)
       .then((book) => {
@@ -95,6 +79,15 @@ class BookController {
     ChapterBook.findById(req.params.id)
       .then((chapter) => {
         res.render("detailChapter",{
+          chapter: MongoosetoObject(chapter),
+        });
+      })
+      .catch(next);
+  }
+  detailChapterApi(req, res, next) {
+    ChapterBook.findById(req.params.id)
+      .then((chapter) => {
+        res.json({
           chapter: MongoosetoObject(chapter),
         });
       })

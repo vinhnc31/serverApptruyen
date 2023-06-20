@@ -19,6 +19,7 @@ class UserController {
   }
   async updateUser(req, res, next) {
     try {
+
       // Kiểm tra xem id và password đã được truyền vào chưa
       if (!req.body.id || !req.body.password) {
         return res.status(400).json("Hãy cung cấp đầy đủ thông tin");
@@ -40,6 +41,8 @@ class UserController {
     } catch (error) {
       console.log(error);
       return res.status(500).json("Cập nhật mật khẩu thất bại");
+
+
     }
   }
   api(req, res, next) {
